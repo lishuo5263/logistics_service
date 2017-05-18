@@ -9,6 +9,9 @@ import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
+import com.alibaba.fastjson.JSON;
+import com.ecochain.ledger.model.PageData;
+
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -202,11 +205,12 @@ public class HttpTool {
             System.out.println("get_data_from_sys -------------->"+getBlockInfo);
         }*/
 
-        StringBuffer stringBuffer = new StringBuffer().append("\"").append("e3230f30c2b53f8d6b6a44dd2eb5a5eef255b1234dfcbcd5899396f77ac5def1").append("\"");
+        /*StringBuffer stringBuffer = new StringBuffer().append("\"").append("e3230f30c2b53f8d6b6a44dd2eb5a5eef255b1234dfcbcd5899396f77ac5def1").append("\"");
         String getBlockInfo = doPost("http://192.168.10.47:8332/get_data_from_sys", stringBuffer.toString());
         Map m = (Map) com.alibaba.fastjson.JSON.parse(getBlockInfo);
         Map m3 = (Map) com.alibaba.fastjson.JSON.parse(com.alibaba.fastjson.JSON.parse(m.get("result").toString()).toString());
         System.out.println(m);
-        System.out.println(m3);
+        System.out.println(m3);*/
+        
     }
 }

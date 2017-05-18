@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.ecochain.ledger.annotation.LoginVerify;
 import com.ecochain.ledger.base.BaseWebService;
@@ -38,8 +39,6 @@ import com.ecochain.ledger.service.ShopSupplierService;
 import com.ecochain.ledger.service.SysGenCodeService;
 import com.ecochain.ledger.service.UserWalletService;
 import com.ecochain.ledger.util.AjaxResponse;
-import com.ecochain.ledger.util.Base64;
-import com.ecochain.ledger.util.DateUtil;
 import com.ecochain.ledger.util.OrderGenerater;
 import com.ecochain.ledger.util.RequestUtils;
 import com.ecochain.ledger.util.SessionUtil;
@@ -1388,18 +1387,11 @@ public class ShopOrderInfoWebService extends BaseWebService {
      * @return: AjaxResponse
      */
 //    @LoginVerify
-    @PostMapping("/payNow")
-    @ApiOperation(nickname = "立即支付", value = "立即支付", notes = "立即支付！")
-    @ApiImplicitParams({
-        @ApiImplicitParam(name = "CSESSIONID", value = "会话token", required = true, paramType = "body", dataType = "String"),
-        @ApiImplicitParam(name = "order_no", value = "订单号", required = true, paramType = "body", dataType = "String"),
-        @ApiImplicitParam(name = "order_amount", value = "付款金额", required = true, paramType = "body", dataType = "String")
-    })
-    public AjaxResponse payNow(HttpServletRequest request) {
+    @RequestMapping(value="payNow",method = RequestMethod.POST,consumes = "application/json")
+    public AjaxResponse payNow(@RequestBody String params) {
         Map<String, Object> data = new HashMap<String, Object>();
         AjaxResponse ar = new AjaxResponse();
-        PageData pd = new PageData();
-        pd = this.getPageData();
+        PageData pd = JSON.parseObject(params,PageData.class);
         try {
            /* String userstr = SessionUtil.getAttibuteForUser(RequestUtils.getRequestValue(CookieConstant.CSESSIONID, request));
             JSONObject user = JSONObject.parseObject(userstr);
