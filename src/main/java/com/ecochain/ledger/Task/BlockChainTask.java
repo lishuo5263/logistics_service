@@ -9,7 +9,6 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 /**
@@ -30,7 +29,7 @@ public class BlockChainTask {
 
     private Logger logger = Logger.getLogger(BlockChainTask.class);
 
-    @Scheduled(fixedDelay=10000)
+    //@Scheduled(fixedDelay=10000)
     public void scheduler()throws  Exception {
         /**
          * 1.需要调用区块链接口查出当日增量的hash数据
