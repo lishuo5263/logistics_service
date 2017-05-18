@@ -273,7 +273,7 @@ public class UsersWebService extends BaseWebService {
                 return ar;
             }
             pd.put("account", account);
-            pd.put("user_type", 4);//供应商
+            pd.put("user_type", "6");//国内物流
             pd.put("mobile_phone", account);//买家
             pd.put("user_name", account);//买家
             pd.put("status", "1");//会员状态默认启用
@@ -533,7 +533,7 @@ public class UsersWebService extends BaseWebService {
                 pd.put("supplierList", supplierList);*/
                 pd.put("supplier_id", String.valueOf(oneSupplier.get("id")));
             } else {
-                pd.put("user_id", String.valueOf(user.get("id")));
+//                pd.put("user_id", String.valueOf(user.get("id")));
                 pd.put("user_type", String.valueOf(user.getString("user_type")));
             }
             
