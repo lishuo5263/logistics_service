@@ -703,7 +703,7 @@
      select order_amount   from shop_order_info where order_no=#{orderNum}
   </select>
 
-  <select id="queryOrderNum"  resultType="java.lang.String" parameterType="java.lang.String">
+  <select id="queryOrderNum"  resultType="java.lang.String" parameterType="java.lang.Integer">
     select count(1)   from shop_order_info where order_no=#{orderNum}
   </select>
 

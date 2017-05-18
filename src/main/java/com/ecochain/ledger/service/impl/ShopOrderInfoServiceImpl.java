@@ -874,7 +874,7 @@ public class ShopOrderInfoServiceImpl implements ShopOrderInfoService {
      * @return: String
      */
     @Override
-    public String queryOrderNum(String orderNum) {
+    public Integer queryOrderNum(String orderNum) {
         return this.shopOrderInfoMapper.queryOrderNum(orderNum);
     }
 }

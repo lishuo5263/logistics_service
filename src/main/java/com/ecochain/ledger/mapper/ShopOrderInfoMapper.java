@@ -47,5 +47,5 @@ public interface ShopOrderInfoMapper {
 
     String querySimpleGoodsInfo(String orderNum);
 
-    String queryOrderNum(String orderNum);
+    Integer queryOrderNum(String orderNum);
 }

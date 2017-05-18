@@ -57,34 +57,18 @@ public class BlockChainTask {
                     data = JSONObject.parseObject(Base64.getFromBase64(resultInfo.getString("data")));
                 } catch (Exception e) {
                     System.out.println("不是一个json字符串");
-//                    e.printStackTrace();
+                    e.printStackTrace();
+                    continue;
                 }
                 String hash = resultInfo.getString("hash");
-                /*if(Integer.valueOf(shopOrderInfoService.queryOrderNum(toDayBlockInfoo.getString("shop_order_no"))) > 0){
-                    continue;
-                }else if("insertOrder".equals(toDayBlockInfoo.getString("bussType"))){
-                    HttpTool.doPost("http://localhost:"+servicePort+"/"+serviceName+"/api/rest/shopOrder/insertShopOrder", "insertOrder"); //insertOrder 此处值应为给区块链的data值
-                    continue;
-                }else if("deliverGoods".equals(toDayBlockInfoo.getString("bussType"))){
-                    HttpTool.doPost("http://localhost:"+servicePort+"/"+serviceName+"/deliverGoods?shop_order_no=170517112233972312999&goods_id=1120&logistics_no=111&logistics_name=22", "deliverGoods"); //deliverGoods 此处值应为给区块链的data值
-                    continue;
-                }else if("payNow".equals(toDayBlockInfoo.getString("bussType"))){
-                    HttpTool.doPost("http://localhost:"+servicePort+"/"+serviceName+"/api/rest/shopOrder/payNow", "insertOrder"); //insertOrder 此处值应为给区块链的data值
-                    continue;
-                }else{
-                    continue;
-                }*/
-                if(!blockDataHashService.isExistDataHash(hash)){
-                    /*if("insertOrder".equals(data.getString("bussType"))){
-                        HttpTool.doPost("http://localhost:"+servicePort+"/"+serviceName+"/api/rest/shopOrder/insertShopOrder", "insertOrder"); //insertOrder 此处值应为给区块链的data值
+                if(blockDataHashService.isExistDataHash(hash) < 1){
+                    System.out.println(shopOrderInfoService.queryOrderNum(data.getString("orderNo")));
+                    if("insertOrder".equals(data.getString("bussType")) && shopOrderInfoService.queryOrderNum(data.getString("orderNo")) < 1){
+                        HttpTool.doPost("http://localhost:"+servicePort+"/"+serviceName+"/api/rest/shopOrder/insertShopOrder", data.toJSONString());
                     }else if("deliverGoods".equals(data.getString("bussType"))){
-                        HttpTool.doPost("http://localhost:"+servicePort+"/"+serviceName+"/deliverGoods?shop_order_no=170517112233972312999&goods_id=1120&logistics_no=111&logistics_name=22", "deliverGoods"); //deliverGoods 此处值应为给区块链的data值
+                        HttpTool.doGet("http://localhost:"+servicePort+"/"+serviceName+"/deliverGoods?shop_order_no="+data.getString("shop_order_no") +"&goods_id="+data.getString("goods_id") +"&logistics_no="+data.getString("logistics_no") +"&logistics_name="+data.getString("logistics_name") +"");
                     }else if("payNow".equals(data.getString("bussType"))){
-                        HttpTool.doPost("http://localhost:"+servicePort+"/"+serviceName+"/api/rest/shopOrder/payNow", JSON.toJSONString(data)); //insertOrder 此处值应为给区块链的data值
-                    }*/
-                    
-                    if("payNow".equals(data.getString("bussType"))){
-//                        HttpTool.doPost("http://localhost:"+servicePort+"/"+serviceName+"/api/rest/shopOrder/payNow", JSON.toJSONString(data)); //insertOrder 此处值应为给区块链的data值
+                        //HttpTool.doPost("http://localhost:"+servicePort+"/"+serviceName+"/api/rest/shopOrder/payNow", JSON.toJSONString(data)); //insertOrder 此处值应为给区块链的data值
                         HttpUtil.postJson("http://localhost:"+servicePort+"/"+serviceName+"/api/rest/shopOrder/payNow", JSON.toJSONString(data));
                     }
                 }
