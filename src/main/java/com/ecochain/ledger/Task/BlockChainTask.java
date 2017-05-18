@@ -1,5 +1,6 @@
 package com.ecochain.ledger.Task;
 
+import com.ecochain.ledger.model.BlockDataHash;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -62,22 +63,21 @@ public class BlockChainTask {
                     continue;
                 }
                 String hash = resultInfo.getString("hash");
-                    
+                BlockDataHash blockDataHash=new BlockDataHash();
+                blockDataHash.setDataHash(resultInfo.getString("hash"));
+                blockDataHash.setBussType(data.getString("bussType"));
                 if(blockDataHashService.isExistDataHash(hash) < 1){
-                    /*System.out.println(shopOrderInfoService.queryOrderNum(data.getString("orderNo")));
-                    if("insertOrder".equals(data.getString("bussType")) && shopOrderInfoService.queryOrderNum(data.getString("orderNo")) < 1){
+                    if("insertOrder".equals(data.getString("bussType"))){
                         HttpTool.doPost("http://localhost:"+servicePort+"/"+serviceName+"/api/rest/shopOrder/insertShopOrder", data.toJSONString());
+                        this.blockDataHashService.insert(blockDataHash);
                     }else if("deliverGoods".equals(data.getString("bussType"))){
                         HttpTool.doGet("http://localhost:"+servicePort+"/"+serviceName+"/deliverGoods?shop_order_no="+data.getString("shop_order_no") +"&goods_id="+data.getString("goods_id") +"&logistics_no="+data.getString("logistics_no") +"&logistics_name="+data.getString("logistics_name") +"");
+                        this.blockDataHashService.insert(blockDataHash);
                     }else if("payNow".equals(data.getString("bussType"))){
-                        //HttpTool.doPost("http://localhost:"+servicePort+"/"+serviceName+"/api/rest/shopOrder/payNow", JSON.toJSONString(data)); //insertOrder 此处值应为给区块链的data值
                         HttpUtil.postJson("http://localhost:"+servicePort+"/"+serviceName+"/api/rest/shopOrder/payNow", JSON.toJSONString(data));
-                    }*/
-                    
-                    if("payNow".equals(data.getString("bussType"))){
-                        //HttpTool.doPost("http://localhost:"+servicePort+"/"+serviceName+"/api/rest/shopOrder/payNow", JSON.toJSONString(data)); //insertOrder 此处值应为给区块链的data值
-                        HttpUtil.postJson("http://localhost:"+servicePort+"/"+serviceName+"/api/rest/shopOrder/payNow", JSON.toJSONString(data));
+                        this.blockDataHashService.insert(blockDataHash);
                     }
+                    
                 }
             }
         }

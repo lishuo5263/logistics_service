@@ -273,7 +273,7 @@ public class UsersWebService extends BaseWebService {
                 return ar;
             }
             pd.put("account", account);
-            pd.put("user_type", 1);//买家
+            pd.put("user_type", 4);//供应商
             pd.put("mobile_phone", account);//买家
             pd.put("user_name", account);//买家
             pd.put("status", "1");//会员状态默认启用
