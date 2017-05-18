@@ -441,5 +441,5 @@ public interface ShopOrderInfoService {
      * @date: 2017年5月2日14:53:36
      * @return: String
      */
-    String queryOrderNum(String orderNum);
+    Integer queryOrderNum(String orderNum);
 }
