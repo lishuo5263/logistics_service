@@ -1388,13 +1388,13 @@ public class ShopOrderInfoWebService extends BaseWebService {
      * @date: 2016年11月9日下午9:59:50
      * @return: AjaxResponse
      */
-    @LoginVerify
+//    @LoginVerify
     @PostMapping("/payNow")
     @ApiOperation(nickname = "立即支付", value = "立即支付", notes = "立即支付！")
     @ApiImplicitParams({
-        @ApiImplicitParam(name = "CSESSIONID", value = "会话token", required = true, paramType = "query", dataType = "String"),
-        @ApiImplicitParam(name = "order_no", value = "订单号", required = true, paramType = "query", dataType = "String"),
-        @ApiImplicitParam(name = "order_amount", value = "付款金额", required = true, paramType = "query", dataType = "String")
+        @ApiImplicitParam(name = "CSESSIONID", value = "会话token", required = true, paramType = "body", dataType = "String"),
+        @ApiImplicitParam(name = "order_no", value = "订单号", required = true, paramType = "body", dataType = "String"),
+        @ApiImplicitParam(name = "order_amount", value = "付款金额", required = true, paramType = "body", dataType = "String")
     })
     public AjaxResponse payNow(HttpServletRequest request) {
         Map<String, Object> data = new HashMap<String, Object>();
@@ -1402,31 +1402,18 @@ public class ShopOrderInfoWebService extends BaseWebService {
         PageData pd = new PageData();
         pd = this.getPageData();
         try {
-            String userstr = SessionUtil.getAttibuteForUser(RequestUtils.getRequestValue(CookieConstant.CSESSIONID, request));
+           /* String userstr = SessionUtil.getAttibuteForUser(RequestUtils.getRequestValue(CookieConstant.CSESSIONID, request));
             JSONObject user = JSONObject.parseObject(userstr);
             pd.put("user_id", String.valueOf(user.get("id")));
             pd.put("seeds", user.getString("seeds"));
             pd.put("user_type", String.valueOf(user.getString("user_type")));
             pd.put("operator", String.valueOf(user.getString("account")));
-            /*if(StringUtil.isEmpty(pd.getString("order_id"))){
-                ar.setSuccess(false);
-                ar.setMessage("订单ID不能为空");
-                ar.setErrorCode(CodeConstant.PARAM_ERROR);
-                return ar;
-            }*/
             if (StringUtil.isEmpty(pd.getString("order_no"))) {
                 ar.setSuccess(false);
                 ar.setMessage("订单号不能为空");
                 ar.setErrorCode(CodeConstant.PARAM_ERROR);
                 return ar;
             }
-            /*if(StringUtil.isEmpty(pd.getString("order_amount"))){
-                ar.setSuccess(false);
-                ar.setMessage("付款金额不能为空");
-                ar.setErrorCode(CodeConstant.PARAM_ERROR);
-                return ar;
-            }*/
-//            PageData shopOrderInfo = shopOrderInfoService.selectById(Integer.valueOf(pd.getString("order_id")), Constant.VERSION_NO);
             PageData shopOrderInfo = shopOrderInfoService.getShopOrderByOrderNo(pd, Constant.VERSION_NO);
             if ("2".equals(shopOrderInfo.getString("order_status"))) {//已支付
                 ar.setSuccess(false);
@@ -1468,50 +1455,24 @@ public class ShopOrderInfoWebService extends BaseWebService {
 
             pd.put("shop_order_no", shopOrderInfo.getString("order_no"));
 
-            //商品表里有供应商有专门价格无需查询兑换费率
-           /* String  rate = "";
-            List<PageData> codeList =sysGenCodeService.findByGroupCode("LIMIT_RATE", Constant.VERSION_NO);
-            for(PageData code:codeList){
-                if("EXCHANGE_RATE".equals(code.get("code_name"))){
-                    rate = code.get("code_value").toString();
-                }
-            }
-            if(StringUtil.isEmpty(rate)){
-
-            }
-            pd.put("rate", rate);*/
             //锁定订单
             boolean lockOrderByOrderNo = shopOrderInfoService.lockOrderByOrderNo(pd);
-            logger.info("支付订单锁定结果lockOrderByOrderNo："+lockOrderByOrderNo);
+            logger.info("支付订单锁定结果lockOrderByOrderNo："+lockOrderByOrderNo);*/
             
             boolean payNow = shopOrderInfoService.payNow(pd, Constant.VERSION_NO);
             if (payNow) {
                 ar.setSuccess(true);
-                ar.setMessage("交易处理中...请前往账单查看兑换结果");
-                data.put("order_no", pd.getString("order_no"));
-                data.put("order_amount", shopOrderInfo.get("order_amount"));
-                data.put("pay_time", DateUtil.getCurrDateTime());
-                ar.setData(data);
+                ar.setMessage("支付数据同步成功！");
                 return ar;
             }
             ar.setSuccess(false);
-            ar.setMessage("支付失败");
+            ar.setMessage("支付数据同步失败");
             ar.setErrorCode(CodeConstant.UPDATE_FAIL);
         } catch (Exception e) {
             e.printStackTrace();
             ar.setSuccess(false);
             ar.setMessage("网络繁忙，请稍候重试！");
             ar.setErrorCode(CodeConstant.SYS_ERROR);
-            //解锁订单
-            try {
-                boolean unLockOrderByOrderNo = shopOrderInfoService.unLockOrderByOrderNo(pd);
-                logger.info("支付订单解锁结果unLockOrderByOrderNo："+unLockOrderByOrderNo);
-            } catch (Exception e1) {
-                e1.printStackTrace();
-                ar.setSuccess(false);
-                ar.setMessage("网络繁忙，请稍候重试！");
-                ar.setErrorCode(CodeConstant.SYS_ERROR);
-            }
         }
         return ar;
     }

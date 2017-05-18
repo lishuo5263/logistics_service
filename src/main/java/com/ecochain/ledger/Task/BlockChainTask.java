@@ -9,17 +9,19 @@ import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.ecochain.ledger.model.PageData;
 import com.ecochain.ledger.service.BlockDataHashService;
 import com.ecochain.ledger.service.ShopOrderInfoService;
 import com.ecochain.ledger.util.Base64;
 import com.ecochain.ledger.util.HttpTool;
+import com.ecochain.ledger.util.HttpUtil;
 import com.ecochain.ledger.util.StringUtil;
 
 /**
  * Created by Lisandro on 2017/5/17.
  */
 @Component
-//@EnableScheduling
+@EnableScheduling
 public class BlockChainTask {
 
     @Value("${server.port}")
@@ -35,7 +37,7 @@ public class BlockChainTask {
 
     private Logger logger = Logger.getLogger(BlockChainTask.class);
 
-//    @Scheduled(fixedDelay=10000)
+    @Scheduled(fixedDelay=12000)
     public void scheduler()throws  Exception {
         /**
          * 1.需要调用区块链接口查出当日增量的hash数据
@@ -45,10 +47,18 @@ public class BlockChainTask {
        logger.info(">>>>>>>>>>>>> Scheduled  Execute Interface ServiceName:   " +serviceName +" ServicePort:  " +servicePort);
         String getToDayBlockInfo = HttpTool.doPost("http://192.168.200.85:8332/GetDataList", "100");
         JSONObject toDayBlockInfo = JSONObject.parseObject(getToDayBlockInfo);
-        for (Object resultMsg : toDayBlockInfo.getJSONArray("result")) {
-            JSONObject resultInfo = (JSONObject) resultMsg;
+//        for (Object resultMsg : toDayBlockInfo.getJSONArray("result")) {
+          for (int i = toDayBlockInfo.getJSONArray("result").size()-1;i>=0;i--) {
+            JSONObject resultInfo = (JSONObject) toDayBlockInfo.getJSONArray("result").get(i);
             if (StringUtil.isNotEmpty(resultInfo.getString("data"))) {
-                JSONObject data  =JSONObject.parseObject(Base64.getFromBase64(resultInfo.getString("data")));
+                System.out.println("data="+Base64.getFromBase64(resultInfo.getString("data")));
+                JSONObject data = new JSONObject();
+                try {
+                    data = JSONObject.parseObject(Base64.getFromBase64(resultInfo.getString("data")));
+                } catch (Exception e) {
+                    System.out.println("不是一个json字符串");
+//                    e.printStackTrace();
+                }
                 String hash = resultInfo.getString("hash");
                 /*if(Integer.valueOf(shopOrderInfoService.queryOrderNum(toDayBlockInfoo.getString("shop_order_no"))) > 0){
                     continue;
@@ -74,11 +84,30 @@ public class BlockChainTask {
                     }*/
                     
                     if("payNow".equals(data.getString("bussType"))){
-                        HttpTool.doPost("http://localhost:"+servicePort+"/"+serviceName+"/api/rest/shopOrder/payNow", JSON.toJSONString(data)); //insertOrder 此处值应为给区块链的data值
+//                        HttpTool.doPost("http://localhost:"+servicePort+"/"+serviceName+"/api/rest/shopOrder/payNow", JSON.toJSONString(data)); //insertOrder 此处值应为给区块链的data值
+                        HttpUtil.postJson("http://localhost:"+servicePort+"/"+serviceName+"/api/rest/shopOrder/payNow", JSON.toJSONString(data));
                     }
                 }
             }
         }
+    }
+    
+    public static void main(String[] args) {
+        /*PageData pd  = new PageData();
+        pd.put("a", "sdf");
+        String str = JSON.toJSONString(pd);
+        System.out.println("str="+str);
+        str = Base64.getBase64(str);
+        System.out.println("getBase64="+str);
+        str = Base64.getFromBase64(str);
+        System.out.println("getFromBase64="+str);
+        JSONObject data = JSONObject.parseObject(str);
+        System.out.println("data="+data);*/
+//        JSONObject json = {"order_no":"170518153048645066999","CSESSIONID":"NjMyMTk5YjViYzEyNDMxOTkxMjViNzI2NmEyZTI1ZWE=","create_time":"2017-05-18 15:30:52","seeds":"25772186183825482577218618382548\u0000","other_source":"商城兑换","bussType":"payNow","operator":"18618382548","order_status":"2","shop_order_no":"170518153048645066999","user_type":"1","user_id":"25772","mobile_phone":"18618382548","order_amount":440.00,"acc_no":"05","remark1":"昊之浪小胸聚拢连体裙式平角泳衣保守显瘦遮肚女士温泉韩版泳装","order_id":"5248","status":"5"};
+//        HttpTool.doPost("http://localhost:3333/logistics-service/api/rest/shopOrder/payNow", ""); //insertOrder 此处值应为给区块链的data值
+        PageData pd  = new PageData();
+        pd.put("user_id", "123456");
+        HttpUtil.postJson("http://localhost:3333/logistics-service/api/rest/shopOrder/payNow", JSON.toJSONString(pd));
     }
 
 }
