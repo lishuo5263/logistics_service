@@ -59,7 +59,7 @@ public class BlockChainTask {
                     data = JSONObject.parseObject(Base64.getFromBase64(resultInfo.getString("data")));
                 } catch (Exception e) {
                     System.out.println("不是一个json字符串");
-                    e.printStackTrace();
+                    //e.printStackTrace();
                     continue;
                 }
                 String hash = resultInfo.getString("hash");
