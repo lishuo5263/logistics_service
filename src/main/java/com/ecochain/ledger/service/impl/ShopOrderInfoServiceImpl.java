@@ -12,6 +12,7 @@ import com.ecochain.ledger.util.DateUtil;
 import com.ecochain.ledger.util.HttpUtil;
 import com.ecochain.ledger.util.StringUtil;
 import com.github.pagehelper.PageHelper;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +22,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -532,45 +534,19 @@ public class ShopOrderInfoServiceImpl implements ShopOrderInfoService {
     @Transactional(propagation = Propagation.REQUIRED)
     public boolean payNow(PageData pd, String versionNo) throws Exception {
         
-        logger.info("-------------商城支付-----------start------------");
-        //从账户余额扣钱到冻结余额中
-        /*if(userWalletService.payNowBySJT(pd, Constant.VERSION_NO)){
-            //修改订单状态为已支付
-            if(!updateShopOrderStatus(pd, versionNo)){
-                logger.error("--------商城支付-------updateShopOrderStatus------更新商城订单状态  失败");
-            }
+        logger.info("-------------卖家订单支付同步-----------start------------");
+        
+        if(updateShopOrderStatus(pd, versionNo)){
             //修改订单商品关联表状态为已支付
             if(!shopOrderGoodsService.updateOrderGoodsStatus(pd, versionNo)){
-                logger.error("--------商城支付-------shopOrderGoodsService.updateOrderGoodsStatus------更新商城订单商品关联表状态  失败");
+                logger.error("--------卖家订单支付同步-------shopOrderGoodsService.updateOrderGoodsStatus------更新商城订单商品关联表状态  失败");
             }
-            
-            boolean accDetailResult = accDetailService.insertSelective(pd, Constant.VERSION_NO);
-            logger.info("--------商城兑换插入账户流水---------accDetailResult结果："+accDetailResult);
-            
-            boolean updateOrderHashResult = updateOrderHashByOrderNo(pd);
-            logger.info("--------商城兑换订单更新hash值---------updateOrderHashResult结果："+updateOrderHashResult);
-            
-            logger.info("-------------商城支付-----------end------------");
-            return true;
-        }else{
-            logger.error("--------商城支付-------userWalletService.payNowBySJT------从账户余额扣钱到冻结余额中  失败");
-        }*/
-        
-        if(!updateShopOrderStatus(pd, versionNo)){
-            logger.error("--------商城支付-------updateShopOrderStatus------更新商城订单状态  失败");
-        }
-        //修改订单商品关联表状态为已支付
-        if(!shopOrderGoodsService.updateOrderGoodsStatus(pd, versionNo)){
-            logger.error("--------商城支付-------shopOrderGoodsService.updateOrderGoodsStatus------更新商城订单商品关联表状态  失败");
         }
         
-        boolean accDetailResult = accDetailService.insertSelective(pd, Constant.VERSION_NO);
-        logger.info("--------商城兑换插入账户流水---------accDetailResult结果："+accDetailResult);
+        /*boolean accDetailResult = accDetailService.insertSelective(pd, Constant.VERSION_NO);
+        logger.info("--------商城兑换插入账户流水---------accDetailResult结果："+accDetailResult);*/
         
-        boolean updateOrderHashResult = updateOrderHashByOrderNo(pd);
-        logger.info("--------商城兑换订单更新hash值---------updateOrderHashResult结果："+updateOrderHashResult);
-        
-        logger.info("-------------商城支付-----------end------------");
+        logger.info("-------------卖家订单支付同步-----------end------------");
         return true;
         
     }
