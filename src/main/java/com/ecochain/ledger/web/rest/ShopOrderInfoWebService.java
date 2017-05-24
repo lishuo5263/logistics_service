@@ -207,7 +207,7 @@ public class ShopOrderInfoWebService extends BaseWebService {
                     shopOrderGood.get(0).setUserId(Integer.valueOf(user.getString("id")));
                     shopOrderGood.get(0).setShippingFee(new BigDecimal(0));
                     shopOrderGood.get(0).setIntegralMoney(new BigDecimal(0));
-                    shopOrderGood.get(0).setTradeHash(user.getString("seeds"));
+                    //shopOrderGood.get(0).setTradeHash(user.getString("seeds"));
                     shopOrderGood.get(0).setData(new StringBuffer(shopOrderGoods.substring(0,shopOrderGoods.length()-1)).append(",\"orderNo\":\""+shopOrderGood.get(0).getOrderNo()+"\"").append(",\"bussType\":\"insertOrder\"}").toString());
                     result = this.shopOrderInfoService.insertShopOrder(shopOrderGood);
                     if (result.get(0).get("ErrorInsert") != null) {
