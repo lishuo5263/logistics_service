@@ -555,12 +555,6 @@ public class UsersWebService extends BaseWebService {
                     orderIdList.add(String.valueOf(shopOrder.get("order_id")));
                 }
                 PageData shopOrder = new PageData();
-                if ("4".equals(user.getString("user_type"))) {//供应商
-//                    shopOrder.put("supplierIdList", supplierIdList);
-                    shopOrder.put("supplier_id", String.valueOf(oneSupplier.get("id")));
-                } else {
-                    shopOrder.put("user_id", String.valueOf(user.get("id")));
-                }
                 shopOrder.put("orderIdList", orderIdList);
                 List<PageData> shopGoods = shopOrderInfoService.getGoodsByOrderId(shopOrder, Constant.VERSION_NO);
 
