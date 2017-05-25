@@ -88,7 +88,7 @@ public class BlockChainTask {
                         shopOrderInfoService.updateHashByOrderNo(updateMap);
                         this.blockDataHashService.insert(blockDataHash);
                     }else if("deliverGoods".equals(data.getString("bussType"))){
-                        HttpTool.doGet("http://localhost:"+servicePort+"/"+serviceName+"/deliverGoods?shop_order_no="+data.getString("shop_order_no") +"&goods_id="+data.getString("goods_id") +"&logistics_no="+data.getString("logistics_no") +"&logistics_name="+data.getString("logistics_name") +"");
+                        HttpTool.doGet("http://localhost:"+servicePort+"/"+serviceName+"/api/rest/shopOrder/deliverGoods?shop_order_no="+data.getString("shop_order_no") +"&goods_id="+data.getString("goods_id") +"&logistics_no="+data.getString("logistics_no") +"&logistics_hash="+resultInfo.getString("hash") +"&logistics_name="+data.getString("logistics_name") +"");
                         this.blockDataHashService.insert(blockDataHash);
                     }else if("payNow".equals(data.getString("bussType"))){
                         data.put("hash", hash);
