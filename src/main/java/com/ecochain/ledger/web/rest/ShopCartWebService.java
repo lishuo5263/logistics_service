@@ -1,24 +1,6 @@
 package com.ecochain.ledger.web.rest;
 
 
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import redis.clients.jedis.Jedis;
 import com.ecochain.ledger.base.BaseWebService;
 import com.ecochain.ledger.constants.CodeConstant;
 import com.ecochain.ledger.model.Page;
@@ -29,6 +11,26 @@ import com.ecochain.ledger.service.ShopCartService;
 import com.ecochain.ledger.service.ShopGoodsService;
 import com.ecochain.ledger.util.AjaxResponse;
 import com.ecochain.ledger.util.StringUtil;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import redis.clients.jedis.Jedis;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.math.BigDecimal;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.*;
 
 /**
  * Created by LiShuo on 2016/10/26.
@@ -44,6 +46,38 @@ public class ShopCartWebService extends BaseWebService {
 
     @Autowired
     private ShopGoodsService shopGoodsService;
+
+    @GetMapping("getImg")
+    public void GetImage(HttpServletRequest request
+            , HttpServletResponse response){
+        try {
+            URL url = new URL("http://img1.gtimg.com/news/pics/hv1/90/166/2213/143942745.jpg");
+            HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setConnectTimeout(5 * 1000);
+            byte data[] = readInputStream(conn.getInputStream());//通过输入流获取图片数据
+            response.setContentType("image/jpg"); //设置返回的文件类型
+            OutputStream os = response.getOutputStream();
+            os.write(data);
+            os.flush();
+            os.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public static byte[] readInputStream(InputStream inStream) throws Exception{
+        ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+        byte[] buffer = new byte[2048];
+        int len = 0;
+        while( (len=inStream.read(buffer)) != -1 ){
+            outStream.write(buffer, 0, len);
+        }
+        inStream.close();
+        return outStream.toByteArray();
+    }
+
 
     /**
      * 新增购物车
