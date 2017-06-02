@@ -95,7 +95,7 @@ public class BlockChainTask {
                         data.put("hash", hash);
                         HttpUtil.postJson("http://localhost:"+servicePort+"/"+serviceName+"/api/rest/shopOrder/payNow", JSON.toJSONString(data));
                         this.blockDataHashService.insert(blockDataHash);
-                    }else if("innerTransferLogisticss".equals(data.getString("bussType"))){
+                    }else if("outerTransferLogisticss".equals(data.getString("bussType"))){
                         data.put("hash", hash);
                         HttpTool.doGet("http://localhost:"+servicePort+"/"+serviceName+"/api/rest/logistics/transferLogisticsWithOutBlockChain?logistics_no="+data.getString("logistics_no") +"&logistics_msg="+data.getString("logistics_msg") +"&create_time="+URLEncoder.encode(data.getString("create_time"),"UTF-8") +"&hash="+resultInfo.getString("hash") +"&shop_order_no="+ data.getString("shop_order_no") +"");
                         this.blockDataHashService.insert(blockDataHash);

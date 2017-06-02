@@ -17,7 +17,6 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,10 +60,6 @@ public class ShopOrderLogisticsDetailServiceImpl implements ShopOrderLogisticsDe
     @Override
     public boolean transferLogistics(PageData pd, String versionNo) throws Exception {
         String kql_url = null;
-        pd.put("create_time", DateUtil.getCurrDateTime());
-        if("transferLogistics".equals(pd.getString("type"))){
-            pd.put("order_status", "11");
-        }
         List<PageData> codeList = sysGenCodeService.findByGroupCode("QKL_URL", Constant.VERSION_NO);
         for (PageData mapObj : codeList) {
             if ("QKL_URL".equals(mapObj.get("code_name"))) {
@@ -72,6 +67,10 @@ public class ShopOrderLogisticsDetailServiceImpl implements ShopOrderLogisticsDe
             }
         }
         JSONObject json = null;
+        if("transferLogistics".equals(pd.getString("type"))){
+            pd.put("order_status", "11");
+        }
+        pd.put("create_time", DateUtil.getCurrDateTime());
         logger.info("====================测试代码========start================");
         String jsonStr = HttpUtil.sendPostData("" + kql_url + "/get_new_key", "");
         JSONObject keyJsonObj = JSONObject.parseObject(jsonStr);
@@ -93,10 +92,10 @@ public class ShopOrderLogisticsDetailServiceImpl implements ShopOrderLogisticsDe
             pd.put("logistics_detail_hash", json.getString("result"));
         }
         ShopOrderLogisticsDetail shopOrderLogisticsDetail = new ShopOrderLogisticsDetail();
-        shopOrderLogisticsDetail.setCreateTime(new Date());
         shopOrderLogisticsDetail.setLogisticsNo(pd.getString("logistics_no"));
         shopOrderLogisticsDetail.setLogisticsMsg(pd.getString("logistics_msg"));
         shopOrderLogisticsDetail.setLogisticsDetailHash(pd.getString("logistics_detail_hash"));
+        shopOrderLogisticsDetail.setCreateTime(DateUtil.fomatDateDetail(pd.getString("create_time")));
         this.shopOrderLogisticsDetailService.insertSelective(shopOrderLogisticsDetail);
         if("transferLogistics".equals(pd.getString("type"))){
             this.shopOrderInfoMapper.updateOrderStatusByOrderNo(pd.getString("shop_order_no"));
@@ -111,7 +110,7 @@ public class ShopOrderLogisticsDetailServiceImpl implements ShopOrderLogisticsDe
         shopOrderLogisticsDetail.setLogisticsNo(pd.getString("logistics_no"));
         shopOrderLogisticsDetail.setLogisticsMsg(pd.getString("logistics_msg"));
         shopOrderLogisticsDetail.setLogisticsDetailHash(pd.getString("logistics_detail_hash"));
-        shopOrderLogisticsDetail.setCreateTime(new Date());
+        shopOrderLogisticsDetail.setCreateTime(DateUtil.fomatDateDetail(pd.getString("create_time")));
         this.shopOrderLogisticsDetailService.insertSelective(shopOrderLogisticsDetail);
         this.shopOrderInfoMapper.updateOrderStatusByOrderNo(pd.get("shop_order_no").toString());
         return true;
