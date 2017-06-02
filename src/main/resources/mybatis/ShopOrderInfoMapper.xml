@@ -795,6 +795,11 @@
     </set>
     where order_no = #{order_no}
   </update>
+  <update id="updateOrderStatusByOrderNo" parameterType="map">
+    update shop_order_info
+    set order_status =  11
+    where order_no = #{order_no}
+  </update>
   <update id="updateShopOrderStatusByHash" parameterType="com.ecochain.ledger.model.PageData">
     update shop_order_info 
     set order_status = #{order_status},

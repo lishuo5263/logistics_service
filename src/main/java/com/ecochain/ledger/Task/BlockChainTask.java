@@ -19,6 +19,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -94,8 +95,11 @@ public class BlockChainTask {
                         data.put("hash", hash);
                         HttpUtil.postJson("http://localhost:"+servicePort+"/"+serviceName+"/api/rest/shopOrder/payNow", JSON.toJSONString(data));
                         this.blockDataHashService.insert(blockDataHash);
+                    }else if("innerTransferLogisticss".equals(data.getString("bussType"))){
+                        data.put("hash", hash);
+                        HttpTool.doGet("http://localhost:"+servicePort+"/"+serviceName+"/api/rest/logistics/transferLogisticsWithOutBlockChain?logistics_no="+data.getString("logistics_no") +"&logistics_msg="+data.getString("logistics_msg") +"&create_time="+URLEncoder.encode(data.getString("create_time"),"UTF-8") +"&hash="+resultInfo.getString("hash") +"&shop_order_no="+ data.getString("shop_order_no") +"");
+                        this.blockDataHashService.insert(blockDataHash);
                     }
-                    
                 }
             }
         }
@@ -113,9 +117,10 @@ public class BlockChainTask {
         JSONObject data = JSONObject.parseObject(str);
         System.out.println("data="+data);*/
         PageData pd  = new PageData();
-        pd.put("user_id", "123456");
+        pd.put("logistics_no", "61669712858");
         try {
-            HttpTool.doPost("http://localhost:3333/logistics-service/api/rest/shopOrder/payNow", JSON.toJSONString(pd));
+            HttpTool.doGet("http://localhost:3333//logistics-service/api/rest/logistics/transferLogisticsWithOutBlockChain" +
+                    "?logistics_no=20243950912&logistics_msg=111dfd&create_time=2017-06-02&hash=19940419");
         } catch (Exception e) {
             e.printStackTrace();
         } 
