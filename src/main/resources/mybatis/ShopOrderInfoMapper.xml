@@ -380,7 +380,7 @@
       and   a.shipping_name = '境外物流'
     </if> -->
     <if test="user_type != null and user_type == 6 " >
-      and   (a.shipping_name is not null or != '')
+      and   (a.shipping_name is not null or a.shipping_name != '')
     </if>
     <if test="user_type != null and user_type == 7 " >
       and   a.order_status = '11'
