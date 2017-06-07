@@ -821,4 +821,11 @@
   <update id="unLockOrderByOrderNo" parameterType="com.ecochain.ledger.model.PageData">
      update shop_order_info set is_lock = '0' where order_no = #{order_no}
   </update>
+  
+  <select id="getOrderStatusByOrderNo" resultType="java.lang.String" parameterType="java.lang.String" >
+    select order_status
+    from shop_order_info
+    where 1=1
+    and order_no = #{order_no}
+  </select>
 </mapper>
