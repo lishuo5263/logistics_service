@@ -21,4 +21,7 @@ public interface ShopOrderLogisticsDetailMapper {
     Map findLogisticsInfoByNo(String logisticsNo);
 
     List<Map<String,Object>> findLogisticsInfoByNo2(String logisticsNo);
+
+    Map findLogisticsInfoByOrderNo(String orderNo);
+
 }
