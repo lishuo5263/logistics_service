@@ -99,6 +99,10 @@ public class BlockChainTask {
                         data.put("hash", hash);
                         HttpTool.doGet("http://localhost:"+servicePort+"/"+serviceName+"/api/rest/logistics/transferLogisticsWithOutBlockChain?logistics_no="+data.getString("logistics_no") +"&logistics_msg="+data.getString("logistics_msg") +"&create_time="+URLEncoder.encode(data.getString("create_time"),"UTF-8") +"&hash="+resultInfo.getString("hash") +"&shop_order_no="+ data.getString("shop_order_no") +"");
                         this.blockDataHashService.insert(blockDataHash);
+                    }else if("confirmReceipt".equals(data.getString("bussType"))){
+                        data.put("hash", hash);
+                        HttpTool.doGet("http://localhost:"+servicePort+"/"+serviceName+"/api/rest/shopOrder/confirmReceipt?&user_id="+data.getString("user_id") +"&order_no="+data.getString("shop_order_no") +"&goods_id="+data.getString("goods_id")+"&hash="+resultInfo.getString("hash") +"");
+                        this.blockDataHashService.insert(blockDataHash);
                     }
                 }
             }
@@ -119,8 +123,8 @@ public class BlockChainTask {
         PageData pd  = new PageData();
         pd.put("logistics_no", "61669712858");
         try {
-            HttpTool.doGet("http://localhost:3333//logistics-service/api/rest/logistics/transferLogisticsWithOutBlockChain" +
-                    "?logistics_no=20243950912&logistics_msg=111dfd&create_time=2017-06-02&hash=19940419");
+            HttpTool.doGet("http://localhost:3333//logistics-service/api/rest/shopOrder/confirmReceipt" +
+                    "?order_no=170607202757004547999&goods_id=1120&CSESSIONID=N2ZjNDFmOWZkMjhjNGQ0NThkOTIzOGZjNTU5YzdiYjU=");
         } catch (Exception e) {
             e.printStackTrace();
         } 
