@@ -332,8 +332,7 @@ public class UsersWebService extends BaseWebService {
         AjaxResponse ar = new AjaxResponse();
         Map<String,Object> data = new HashMap<String,Object>();
         try {
-            String sessionId = RequestUtils.getRequestValue(CookieConstant.CSESSIONID,request);
-            String userstr = SessionUtil.getAttibuteForUser(sessionId);
+            String userstr = SessionUtil.getAttibuteForUser(RequestUtils.getRequestValue(CookieConstant.CSESSIONID, request));
             JSONObject user = JSONObject.parseObject(userstr);
             PageData userInfo = userDetailsService.getUserInfoByUserId(user.getInteger("user_id"), Constant.VERSION_NO);
             data.put("userInfo", userInfo);
