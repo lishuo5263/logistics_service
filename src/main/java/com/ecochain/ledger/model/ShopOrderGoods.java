@@ -103,7 +103,7 @@ public class ShopOrderGoods implements Serializable {
 
     private BigDecimal orderAmount;
 
-    private Date addTime;
+    private String addTime;
 
     private String createTime;
 
@@ -383,11 +383,11 @@ public class ShopOrderGoods implements Serializable {
         this.orderAmount = orderAmount;
     }
 
-    public Date getAddTime() {
+    public String getAddTime() {
         return addTime;
     }
 
-    public void setAddTime(Date addTime) {
+    public void setAddTime(String addTime) {
         this.addTime = addTime;
     }
 
