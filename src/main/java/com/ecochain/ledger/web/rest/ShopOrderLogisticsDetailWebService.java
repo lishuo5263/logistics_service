@@ -54,6 +54,7 @@ public class ShopOrderLogisticsDetailWebService extends BaseWebService {
     @GetMapping("/transferLogistics")
     @ApiOperation(nickname = "transferLogistics", value = "物流转货", notes = "物流转货！！")
     @ApiImplicitParams({
+            @ApiImplicitParam(name = "CSESSIONID", value = "CSESSIONID", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "logistics_no", value = "物流单号", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "logistics_msg", value = "物流信息 ", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "type", value = "业务类型 转货传值为 transferLogistics ，新增物流信息随意传值 ", required = true, paramType = "query", dataType = "String")
