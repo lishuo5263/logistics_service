@@ -69,7 +69,10 @@ public class ShopOrderLogisticsDetailServiceImpl implements ShopOrderLogisticsDe
         JSONObject json = null;
         if("transferLogistics".equals(pd.getString("type"))){
             pd.put("order_status", "11");
+        }else{
+            pd.put("order_status","8");
         }
+        pd.put("flag", "inner");
         pd.put("create_time", DateUtil.getCurrDateTime());
         logger.info("====================测试代码========start================");
         String jsonStr = HttpUtil.sendPostData("" + kql_url + "/get_new_key", "");
@@ -98,7 +101,11 @@ public class ShopOrderLogisticsDetailServiceImpl implements ShopOrderLogisticsDe
         shopOrderLogisticsDetail.setCreateTime(DateUtil.fomatDateDetail(pd.getString("create_time")));
         this.shopOrderLogisticsDetailService.insertSelective(shopOrderLogisticsDetail);
         if("transferLogistics".equals(pd.getString("type"))){
-            this.shopOrderInfoMapper.updateOrderStatusByOrderNo(pd.getString("shop_order_no"));
+            pd.put("order_no",pd.getString("shop_order_no"));
+            this.shopOrderInfoMapper.updateOrderStatusByOrderNo2(pd);
+        }else{
+            pd.put("order_no",pd.getString("shop_order_no"));
+            this.shopOrderInfoMapper.updateOrderStatusByOrderNo2(pd);
         }
         logger.info("====================测试代码=======end=================");
         return true;
@@ -112,9 +119,7 @@ public class ShopOrderLogisticsDetailServiceImpl implements ShopOrderLogisticsDe
         shopOrderLogisticsDetail.setLogisticsDetailHash(pd.getString("logistics_detail_hash"));
         shopOrderLogisticsDetail.setCreateTime(DateUtil.fomatDateDetail(pd.getString("create_time")));
         this.shopOrderLogisticsDetailService.insertSelective(shopOrderLogisticsDetail);
-        if("transferLogistics".equals(pd.getString("type"))){
-            this.shopOrderInfoMapper.updateOrderStatusByOrderNo(pd.getString("shop_order_no"));
-        }
+        this.shopOrderInfoMapper.updateOrderStatusByOrderNo2(pd);
         return true;
     }
 }
