@@ -65,6 +65,12 @@ public class ShopOrderLogisticsDetailWebService extends BaseWebService {
         page.setPd(pd);
         AjaxResponse ar = new AjaxResponse();
         Map<String, Object> map = new HashMap<String, Object>();
+        if(pd.getString("logistics_msg").contains("?")){
+            ar.setSuccess(false);
+            ar.setErrorCode(CodeConstant.PARAM_ERROR);
+            ar.setMessage("请勿重复提交！");
+            return ar;
+        }
         try {
             String userstr = SessionUtil.getAttibuteForUser(RequestUtils.getRequestValue(CookieConstant.CSESSIONID, request));
             JSONObject user = JSONObject.parseObject(userstr);
