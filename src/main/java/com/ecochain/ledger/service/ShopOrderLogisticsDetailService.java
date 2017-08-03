@@ -21,4 +21,6 @@ public interface ShopOrderLogisticsDetailService {
     boolean transferLogistics(PageData pd, String versionNo) throws Exception;
 
     boolean transferLogisticsWithOutBlockChain(PageData pd, String versionNo) throws Exception;
+    
+    int searchTransferLogistics(PageData pd, String versionNo) throws Exception;
 }

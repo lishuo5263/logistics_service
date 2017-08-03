@@ -90,8 +90,10 @@ public class ShopOrderLogisticsDetailWebService extends BaseWebService {
                 pd.put("logistics_no", logisticsNo);
                 pd.put("shop_order_no", map.get("shop_order_no").toString());
                 pd.put("bussType", "innerTransferLogisticss");
-                this.shopOrderLogisticsDetailService.transferLogistics(pd, Constant.VERSION_NO);
-                return fastReturn(map, true, "物流转货成功！", CodeConstant.SC_OK);
+                if(this.shopOrderLogisticsDetailService.searchTransferLogistics(pd, Constant.VERSION_NO) == 0){
+                    this.shopOrderLogisticsDetailService.transferLogistics(pd, Constant.VERSION_NO);
+                    return fastReturn(map, true, "物流转货成功！", CodeConstant.SC_OK);
+                }
             } else {
                 return fastReturn(null, false, "接口参数异常，物流转货失败！", CodeConstant.PARAM_ERROR);
             }

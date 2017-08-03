@@ -124,4 +124,8 @@ public class ShopOrderLogisticsDetailServiceImpl implements ShopOrderLogisticsDe
         }
         return true;
     }
+    @Override
+    public int searchTransferLogistics(PageData pd, String versionNo) throws Exception {
+        return shopOrderLogisticsDetailMapper.findLogisticsInfoByOrderNo2(pd);
+    }
 }
