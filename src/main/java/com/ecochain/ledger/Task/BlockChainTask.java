@@ -111,7 +111,7 @@ public class BlockChainTask {
     
     public static void main(String[] args) {
         /*PageData pd  = new PageData();
-        pd.put("a", "sdf");
+        pd.put("a1", "sdf");
         String str = JSON.toJSONString(pd);
         System.out.println("str="+str);
         str = Base64.getBase64(str);
