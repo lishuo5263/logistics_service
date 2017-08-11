@@ -1,4 +1,4 @@
-package com.ecochain.ledger.util;
+/*package com.ecochain.ledger.util;
 
 import java.util.Comparator;
 
@@ -7,3 +7,4 @@ public class MapKeyComparator implements Comparator<String>{
 		return str1.compareTo(str2);
 	}
 }
+*/

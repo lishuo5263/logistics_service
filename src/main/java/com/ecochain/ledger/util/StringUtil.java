@@ -1222,14 +1222,14 @@ public class StringUtil
 	 * @param map
 	 * @return
 	 */
-	public static Map<String, String> sortMapByKey(Map<String, String> map) {
+	/*public static Map<String, String> sortMapByKey(Map<String, String> map) {
 		if (map == null || map.isEmpty()) {
 			return null;
 		}
 		Map<String, String> sortMap = new TreeMap<String, String>(new MapKeyComparator());
 		sortMap.putAll(map);
 		return sortMap;
-	}
+	}*/
 	/**
 	 * 生成编码
 	 * @param prefix
